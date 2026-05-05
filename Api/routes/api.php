@@ -14,4 +14,5 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/doctors', [DoctorController::class, 'index']);
+Route::post('/doctors', [DoctorController::class, 'store']);
 Route::get('/dashboard', [DashboardController::class, 'stats']);
