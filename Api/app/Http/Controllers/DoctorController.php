@@ -40,4 +40,41 @@ class DoctorController extends Controller
         'doctor' => $doctor
     ]);
 }
+public function update(Request $request, $id)
+{
+    $doctor = Doctor::find($id);
+
+    if (!$doctor) {
+        return response()->json([
+            'message' => 'Doctor not found'
+        ], 404);
+    }
+
+    $doctor->name = $request->name;
+    $doctor->email = $request->email;
+    $doctor->phone = $request->phone;
+    $doctor->specialite = $request->specialite;
+    $doctor->save();
+
+    return response()->json([
+        'message' => 'Doctor updated successfully',
+        'doctor' => $doctor
+    ]);
+}
+public function destroy($id)
+{
+    $doctor = Doctor::find($id);
+
+    if (!$doctor) {
+        return response()->json([
+            'message' => 'Doctor not found'
+        ], 404);
+    }
+
+    $doctor->delete();
+
+    return response()->json([
+        'message' => 'Doctor deleted successfully'
+    ]);
+}
 }

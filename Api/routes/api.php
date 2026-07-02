@@ -15,4 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/doctors', [DoctorController::class, 'index']);
 Route::post('/doctors', [DoctorController::class, 'store']);
+Route::put('/doctors/{id}', [DoctorController::class, 'update']);
+Route::delete('/doctors/{id}', [DoctorController::class, 'destroy']);
+
 Route::get('/dashboard', [DashboardController::class, 'stats']);
