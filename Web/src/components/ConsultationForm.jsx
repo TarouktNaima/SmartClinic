@@ -10,7 +10,7 @@ function ConsultationForm({ patients, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData, () => {
-      // تفريغ الـ Form بعد الحفظ بنجاح
+     
       setFormData({ patient_id: '', diagnostic: '', prescription: '' });
     });
   };
@@ -20,7 +20,7 @@ function ConsultationForm({ patients, onSubmit }) {
       <h2 className="text-xl font-semibold text-slate-700 mb-4">Nouvelle Consultation</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         
-        {/* اختيار المريض من القائمة */}
+        
         <div>
           <label className="block text-sm font-medium text-slate-600 mb-1">Sélectionner un Patient</label>
           <select name="patient_id" value={formData.patient_id} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
@@ -33,13 +33,13 @@ function ConsultationForm({ patients, onSubmit }) {
           </select>
         </div>
 
-        {/* الـ Diagnostic */}
+        {/* Diagnostic */}
         <div>
           <label className="block text-sm font-medium text-slate-600 mb-1">Diagnostic</label>
           <textarea name="diagnostic" value={formData.diagnostic} onChange={handleChange} required rows="3" placeholder="Description des symptômes et diagnostic..." className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
         </div>
 
-        {/* الـ Prescription (Ordonnance) */}
+        {/* Prescription (Ordonnance) */}
         <div>
           <label className="block text-sm font-medium text-slate-600 mb-1">Prescription (Médicaments)</label>
           <textarea name="prescription" value={formData.prescription} onChange={handleChange} rows="3" placeholder="Liste des médicaments et doses..." className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>

@@ -6,6 +6,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\PatientFileController;
 
 
 Route::get('/user', function (Request $request) {
@@ -23,3 +24,7 @@ Route::apiResource('patients', PatientController::class);
 Route::apiResource('consultations', ConsultationController::class);
 // Historique d'un patient spécifique
 Route::get('patients/{id}/consultations', [ConsultationController::class, 'getPatientHistory']);
+// upload 
+Route::post('/upload', [PatientFileController::class, 'upload']);
+// get file of patients
+Route::get('/patients/{id}/files', [PatientFileController::class, 'getPatientFiles']);
