@@ -19,3 +19,13 @@ Route::put('/doctors/{id}', [DoctorController::class, 'update']);
 Route::delete('/doctors/{id}', [DoctorController::class, 'destroy']);
 
 Route::get('/dashboard', [DashboardController::class, 'stats']);
+
+Route::post('/users', [AuthController::class, 'storeUser']);
+
+Route::middleware('auth:sanctum')->get(
+    '/doctor/profile',
+    [DoctorController::class, 'profile']
+);
+
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);

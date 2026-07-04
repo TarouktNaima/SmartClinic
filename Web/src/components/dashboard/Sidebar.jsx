@@ -6,6 +6,8 @@ import {
   Menu,
   X,
   UsersRound,
+  Shield,
+  ClipboardList,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -48,6 +50,18 @@ export default function Sidebar() {
       label: "Specialities",
       icon: Stethoscope,
       roles: ["admin", "secretary", "patient"],
+    },
+    {
+      to: "/add-admin",
+      label: "Add Admin",
+      icon: Shield,
+      roles: ["admin"],
+    },
+    {
+      to: "/add-secretary",
+      label: "Add Secretary",
+      icon: ClipboardList,
+      roles: ["admin"],
     },
   ];
 

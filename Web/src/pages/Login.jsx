@@ -47,6 +47,8 @@ function Login() {
       setTimeout(() => {
         if (user.role === "patient") {
           navigate("/specialities");
+        } else if (user.role === "doctor") {
+          navigate("/doctor-dashboard");
         } else {
           navigate("/dashboard");
         }
