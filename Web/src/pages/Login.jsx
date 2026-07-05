@@ -7,6 +7,7 @@ import {
   Mail,
   Lock,
   Eye,
+  EyeOff,
   LogIn,
   UserPlus,
   CalendarDays,
@@ -14,12 +15,12 @@ import {
   BarChart3,
   ShieldCheck,
   HeartPulse,
-  Sun,
 } from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -111,7 +112,6 @@ function Login() {
         transition={{ duration: 0.7 }}
         className="mx-auto flex min-h-[calc(100vh-16px)] max-w-[1050px] overflow-hidden rounded-[28px] bg-[#F6FAFD] shadow-2xl"
       >
-        {/* LEFT SIDE */}
         <div className="relative hidden w-[43%] overflow-hidden bg-[#0A1931] p-8 text-white lg:block">
           <motion.div
             animate={{ y: [0, -18, 0] }}
@@ -207,10 +207,7 @@ function Login() {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="relative flex flex-1 items-center justify-center bg-[#F6FAFD] p-5 lg:p-8">
-          
-
           <motion.div
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
@@ -266,7 +263,7 @@ function Login() {
                   </div>
 
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Entrez votre mot de passe"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -276,18 +273,21 @@ function Login() {
                     className="h-full flex-1 bg-transparent px-4 text-sm text-[#0A1931] outline-none placeholder:text-[#1A3D63]/45"
                   />
 
-                  <div className="flex h-full w-12 items-center justify-center text-[#1A3D63]">
-                    <Eye size={19} />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="flex h-full w-12 items-center justify-center text-[#1A3D63] hover:text-[#0A3D91]"
+                  >
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  </button>
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-xs font-semibold">
-                <label className="flex items-center gap-2 text-[#0A1931]">
-                 
-                </label>
+                <label className="flex items-center gap-2 text-[#0A1931]"></label>
 
                 <button
+                  type="button"
                   onClick={() => navigate("/forgot-password")}
                   className="text-[#1A3D63] hover:text-[#4A7FA7]"
                 >
@@ -331,8 +331,6 @@ function Login() {
                 <UserPlus size={19} />
                 Créer un compte
               </motion.button>
-
-             
             </div>
           </motion.div>
         </div>
