@@ -3,6 +3,19 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  Mail,
+  Lock,
+  Eye,
+  LogIn,
+  UserPlus,
+  CalendarDays,
+  Users,
+  BarChart3,
+  ShieldCheck,
+  HeartPulse,
+  Sun,
+} from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -11,14 +24,14 @@ function Login() {
   const navigate = useNavigate();
 
   const toastStyle = {
-    background: "rgba(255, 255, 255, 0.75)",
+    background: "rgba(255, 255, 255, 0.9)",
     backdropFilter: "blur(10px)",
-    color: "#1a2a3a",
-    borderRadius: "20px",
-    border: "1px solid rgba(130, 188, 224, 0.3)",
+    color: "#0A1931",
+    borderRadius: "18px",
+    border: "1px solid rgba(179, 207, 229, 0.6)",
     fontWeight: "600",
-    fontSize: "15px",
-    padding: "16px 24px",
+    fontSize: "14px",
+    padding: "14px 20px",
   };
 
   const handleLogin = async () => {
@@ -65,101 +78,263 @@ function Login() {
     }
   };
 
+  const features = [
+    {
+      icon: CalendarDays,
+      title: "Rendez-vous",
+      text: "Planifiez et gérez facilement",
+    },
+    {
+      icon: Users,
+      title: "Patients",
+      text: "Accédez aux dossiers en toute sécurité",
+    },
+    {
+      icon: BarChart3,
+      title: "Statistiques",
+      text: "Suivez l'activité de votre cabinet",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Sécurité",
+      text: "Vos données sont protégées",
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#82BCE0] via-[#CAE3F0] to-[#F3F9FC] p-4">
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          style: {
-            boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-          },
-        }}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-[#EAF5FF] via-[#F6FAFD] to-[#DCEEFF] p-2">
+      <Toaster position="top-center" />
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="flex flex-col md:flex-row w-full max-w-4xl bg-white/30 backdrop-blur-xl rounded-[40px] shadow-2xl overflow-hidden border border-white/40"
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7 }}
+        className="mx-auto flex min-h-[calc(100vh-16px)] max-w-[1050px] overflow-hidden rounded-[28px] bg-[#F6FAFD] shadow-2xl"
       >
-        <div className="hidden md:flex md:w-1/2 bg-[#1a2a3a] relative items-center justify-center p-12">
-          <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/clean-gray-paper.png')]"></div>
+        {/* LEFT SIDE */}
+        <div className="relative hidden w-[43%] overflow-hidden bg-[#0A1931] p-8 text-white lg:block">
+          <motion.div
+            animate={{ y: [0, -18, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-28 top-28 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/70"
+          />
 
           <motion.div
-            animate={{ y: [0, -15, 0] }}
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="z-10 text-center"
-          >
-            <img
-              src="/logo.jpg"
-              alt="Smart Clinic"
-              className="w-48 h-48 object-cover rounded-full border-4 border-[#82BCE0] shadow-glow mb-6"
-            />
+            animate={{ y: [0, 18, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-40 top-60 h-[430px] w-[430px] rounded-full bg-[#4A7FA7]/50"
+          />
 
-            <h1 className="text-white text-4xl font-bold tracking-wider">
-              SmartClinic
-            </h1>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3">
+              <motion.div
+                animate={{
+                  boxShadow: [
+                    "0 0 12px rgba(74,127,167,0.4)",
+                    "0 0 28px rgba(74,127,167,0.8)",
+                    "0 0 12px rgba(74,127,167,0.4)",
+                  ],
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#B3CFE5] to-[#1A3D63]"
+              >
+                <HeartPulse size={25} />
+              </motion.div>
 
-            <p className="text-blue-200 text-sm mt-2">
-              Votre santé, notre priorité digitale.
-            </p>
-          </motion.div>
+              <div>
+                <h1 className="text-2xl font-extrabold">
+                  Smart<span className="text-[#6DA8FF]">Clinic</span>
+                </h1>
+                <p className="text-xs text-[#B3CFE5]">
+                  Votre santé, notre priorité
+                </p>
+              </div>
+            </div>
 
-          <div className="absolute bottom-[-50px] left-[-50px] w-64 h-64 bg-[#82BCE0] rounded-full blur-[80px] opacity-30"></div>
+            <div className="mt-16">
+              <h2 className="text-3xl font-extrabold leading-tight">
+                Bienvenue
+                <span className="block text-[#8CB9FF]">sur SmartClinic</span>
+              </h2>
+
+              <div className="mt-5 h-1 w-12 rounded-full bg-[#6DA8FF]" />
+
+              <p className="mt-6 max-w-sm text-sm leading-7 text-[#F6FAFD]/90">
+                Gérez vos patients, vos rendez-vous et votre cabinet médical en
+                toute simplicité.
+              </p>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {features.map((item, index) => {
+                const Icon = item.icon;
+
+                return (
+                  <motion.div
+                    key={item.title}
+                    initial={{ opacity: 0, x: -25 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.15 * index }}
+                    whileHover={{ x: 8 }}
+                    className="flex items-center gap-4"
+                  >
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1A3D63] text-[#B3CFE5]">
+                      <Icon size={22} />
+                    </div>
+
+                    <div>
+                      <h3 className="text-sm font-bold">{item.title}</h3>
+                      <p className="text-xs text-[#B3CFE5]">{item.text}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="mt-9 flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl"
+            >
+              <ShieldCheck size={28} className="text-[#B3CFE5]" />
+              <div>
+                <h3 className="text-sm font-bold">Conforme aux normes</h3>
+                <p className="text-xs text-[#B3CFE5]">
+                  Données sécurisées et confidentielles
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="w-full md:w-1/2 p-10 md:p-16 flex flex-col justify-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">Bienvenue</h2>
+        {/* RIGHT SIDE */}
+        <div className="relative flex flex-1 items-center justify-center bg-[#F6FAFD] p-5 lg:p-8">
+          
 
-          <p className="text-gray-500 mb-8">
-            Connectez-vous à votre espace médical
-          </p>
-
-          <div className="space-y-6">
-            <input
-              type="email"
-              placeholder="Email Professionnel"
-              value={email}
-              className="w-full bg-white/50 border border-gray-200 rounded-2xl py-4 px-6 outline-none focus:border-[#82BCE0] focus:ring-2 focus:ring-[#82BCE0]/20 transition-all text-gray-700 placeholder-gray-400"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              value={password}
-              className="w-full bg-white/50 border border-gray-200 rounded-2xl py-4 px-6 outline-none focus:border-[#82BCE0] focus:ring-2 focus:ring-[#82BCE0]/20 transition-all text-gray-700 placeholder-gray-400"
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleLogin();
-              }}
-            />
-
-            <motion.button
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              onClick={handleLogin}
-              className="w-full bg-[#6FAED6] hover:bg-[#5FA3CF] text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-200/50 transition-all mt-4 tracking-wide"
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="w-full max-w-md"
+          >
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-xl shadow-[#B3CFE5]/40"
             >
-              Se connecter
-            </motion.button>
-          </div>
+              <Lock size={32} className="text-[#1A3D63]" />
+            </motion.div>
 
-          <div className="flex justify-between mt-10 text-sm font-semibold">
-            <span
-              onClick={() => navigate("/forgot-password")}
-              className="text-gray-400 hover:text-[#82BCE0] cursor-pointer transition-colors"
-            >
-              Mot de passe oublié ?
-            </span>
+            <div className="text-center">
+              <h2 className="text-3xl font-extrabold text-[#0A1931]">
+                Connexion
+              </h2>
+              <p className="mt-2 text-sm text-[#1A3D63]/75">
+                Connectez-vous à votre compte
+              </p>
+            </div>
 
-            <span
-              onClick={() => navigate("/register")}
-              className="text-[#6FAED6] hover:text-[#5FA3CF] hover:underline cursor-pointer"
-            >
-              Créer un compte
-            </span>
-          </div>
+            <div className="mt-8 space-y-5">
+              <div>
+                <label className="mb-2 block text-sm font-bold text-[#0A1931]">
+                  Adresse e-mail
+                </label>
+
+                <div className="flex h-12 items-center rounded-xl border border-[#D8E6F3] bg-white shadow-sm focus-within:border-[#4A7FA7] focus-within:ring-4 focus-within:ring-[#B3CFE5]/40">
+                  <div className="flex h-full w-12 items-center justify-center border-r border-[#D8E6F3] text-[#1A3D63]">
+                    <Mail size={19} />
+                  </div>
+
+                  <input
+                    type="email"
+                    placeholder="Entrez votre adresse e-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-full flex-1 bg-transparent px-4 text-sm text-[#0A1931] outline-none placeholder:text-[#1A3D63]/45"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-[#0A1931]">
+                  Mot de passe
+                </label>
+
+                <div className="flex h-12 items-center rounded-xl border border-[#D8E6F3] bg-white shadow-sm focus-within:border-[#4A7FA7] focus-within:ring-4 focus-within:ring-[#B3CFE5]/40">
+                  <div className="flex h-full w-12 items-center justify-center border-r border-[#D8E6F3] text-[#1A3D63]">
+                    <Lock size={19} />
+                  </div>
+
+                  <input
+                    type="password"
+                    placeholder="Entrez votre mot de passe"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleLogin();
+                    }}
+                    className="h-full flex-1 bg-transparent px-4 text-sm text-[#0A1931] outline-none placeholder:text-[#1A3D63]/45"
+                  />
+
+                  <div className="flex h-full w-12 items-center justify-center text-[#1A3D63]">
+                    <Eye size={19} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <label className="flex items-center gap-2 text-[#0A1931]">
+                 
+                </label>
+
+                <button
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-[#1A3D63] hover:text-[#4A7FA7]"
+                >
+                  Mot de passe oublié ?
+                </button>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.015 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleLogin}
+                className="relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#0A3D91] text-sm font-bold text-white shadow-xl shadow-[#1A3D63]/25"
+              >
+                <motion.span
+                  animate={{ x: ["-140%", "150%"] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute inset-y-0 w-24 bg-white/20 blur-xl"
+                />
+                <LogIn size={19} />
+                Se connecter
+              </motion.button>
+
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-[#D8E6F3]" />
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1A3D63]">
+                  ou
+                </span>
+                <div className="h-px flex-1 bg-[#D8E6F3]" />
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate("/register")}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#D8E6F3] bg-white text-sm font-bold text-[#0A3D91] hover:bg-[#B3CFE5]/15"
+              >
+                <UserPlus size={19} />
+                Créer un compte
+              </motion.button>
+
+             
+            </div>
+          </motion.div>
         </div>
       </motion.div>
     </div>
