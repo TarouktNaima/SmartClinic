@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { motion } from "framer-motion";
-import { ArrowLeft, User, CalendarCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  User,
+  CalendarCheck,
+  Stethoscope,
+  Mail,
+} from "lucide-react";
 
 function DoctorsBySpecialite() {
   const { specialite } = useParams();
@@ -14,103 +20,129 @@ function DoctorsBySpecialite() {
     const fetchDoctors = async () => {
       try {
         const res = await api.get("/doctors");
-        const filtered = res.data.filter(doc => doc.specialite === specialite);
+        const data = res.data.doctors || res.data.data || res.data || [];
+
+        const filtered = data.filter(
+          (doc) =>
+            String(doc.specialite || "")
+              .toLowerCase()
+              .trim() === String(specialite || "").toLowerCase().trim()
+        );
+
         setDoctors(filtered);
-        setLoading(false);
       } catch (err) {
         console.error("Erreur API:", err);
+      } finally {
         setLoading(false);
       }
     };
+
     fetchDoctors();
   }, [specialite]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#82BCE0] via-[#CAE3F0] to-[#F3F9FC] p-8 md:p-16 relative overflow-hidden">
-      
-      {/* Decorative Blur Circles */}
-      <div className="fixed top-[-100px] left-[-100px] w-96 h-96 bg-white opacity-20 blur-[120px] -z-10"></div>
-      <div className="fixed bottom-[-50px] right-[-50px] w-80 h-80 bg-[#1a2a3a] opacity-5 blur-[100px] -z-10"></div>
+    <div className="min-h-screen overflow-hidden bg-[#0A1931] px-5 py-10 text-white md:px-10 lg:px-16">
+      <div className="pointer-events-none fixed -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]" />
+      <div className="pointer-events-none fixed -bottom-44 -right-44 h-[380px] w-[380px] rounded-full bg-[#4A7FA7]/45 blur-[130px]" />
 
-      <div className="max-w-6xl mx-auto">
-        {/* Back Navigation */}
-        <motion.button 
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <motion.button
           whileHover={{ x: -5 }}
-          onClick={() => navigate(-1)} 
-          className="group flex items-center gap-4 text-[#1a2a3a] font-black mb-12"
+          whileTap={{ scale: 0.97 }}
+          onClick={() => navigate(-1)}
+          className="mb-10 flex items-center gap-3 rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]/75 px-4 py-3 text-sm font-bold text-[#B3CFE5] shadow-lg shadow-[#0A1931]/25 backdrop-blur-xl transition hover:bg-[#1A3D63] hover:text-white"
         >
-          <div className="p-3 bg-white/40 backdrop-blur-md rounded-2xl shadow-sm group-hover:bg-[#1a2a3a] group-hover:text-white transition-all duration-300 border border-white/50">
-            <ArrowLeft size={20} />
-          </div>
-          <span className="tracking-widest uppercase text-[12px]">Retour</span>
+          <ArrowLeft size={18} />
+          Retour
         </motion.button>
 
-        <header className="mb-16">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <h2 className="text-5xl font-black text-[#1a2a3a] tracking-tighter">
-              Spécialistes <br />
-              <span className="text-white drop-shadow-sm opacity-90">{specialite}</span>
-            </h2>
-            <div className="h-2 w-24 bg-[#1a2a3a] mt-6 rounded-full opacity-20"></div>
-          </motion.div>
-        </header>
+        <motion.header
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="mb-10 overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-gradient-to-br from-[#0A1931] via-[#102A4B] to-[#1A3D63] p-7 shadow-2xl shadow-[#0A1931]/40"
+        >
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#B3CFE5]">
+            SmartClinic
+          </p>
+
+          <h1 className="text-3xl font-extrabold text-white md:text-4xl">
+            Spécialistes
+            <span className="block text-[#B3CFE5]">{specialite}</span>
+          </h1>
+
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#F6FAFD]/75">
+            Consultez les médecins disponibles dans cette spécialité et
+            choisissez le professionnel qui vous convient.
+          </p>
+        </motion.header>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-40 gap-4">
-             <div className="w-12 h-12 border-4 border-[#1a2a3a]/10 border-t-[#1a2a3a] rounded-full animate-spin"></div>
-             <p className="text-[#1a2a3a]/40 font-bold tracking-widest text-xs uppercase">Chargement des experts...</p>
+          <div className="mx-auto flex max-w-md flex-col items-center justify-center rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-10 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl">
+            <div className="h-11 w-11 animate-spin rounded-full border-4 border-[#B3CFE5]/15 border-t-[#B3CFE5]" />
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+              Chargement des médecins...
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {doctors.length > 0 ? (
               doctors.map((doc, idx) => (
                 <motion.div
-                  key={doc.id || doc._id} // t-akad wach 3ndk id wlla _id fl-base de données
-                  initial={{ opacity: 0, y: 30 }}
+                  key={doc.id || doc._id}
+                  initial={{ opacity: 0, y: 25 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -10 }}
-                  className="bg-white/30 backdrop-blur-xl p-10 rounded-[45px] border border-white/40 shadow-2xl hover:shadow-blue-200/50 transition-all flex flex-col items-center text-center group relative overflow-hidden"
+                  transition={{ delay: idx * 0.08, duration: 0.45 }}
+                  whileHover={{ y: -6 }}
+                  className="group relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 text-center shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl transition hover:border-[#4A7FA7]/60"
                 >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-white opacity-10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:opacity-30 transition-opacity"></div>
+                  <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#B3CFE5]/15 blur-3xl transition group-hover:bg-[#B3CFE5]/25" />
 
-                  <div className="w-24 h-24 bg-[#1a2a3a] rounded-[30px] flex items-center justify-center text-[#82BCE0] mb-8 shadow-2xl shadow-[#1a2a3a]/30 group-hover:scale-110 transition-transform duration-500">
-                    <User size={45} strokeWidth={1.5} />
-                  </div>
+                  <div className="relative z-10">
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-[#B3CFE5]/20 bg-[#102A4B] text-[#B3CFE5] shadow-lg shadow-[#0A1931]/30 transition group-hover:bg-[#1A3D63]">
+                      <User size={36} strokeWidth={1.5} />
+                    </div>
 
-                  <h4 className="font-black text-[#1a2a3a] text-2xl mb-2 tracking-tight group-hover:text-[#3b82f6] transition-colors">
-                    Dr. {doc.name}
-                  </h4>
-                  
-                  <div className="px-4 py-1.5 bg-[#1a2a3a]/5 rounded-full mb-8">
-                    <p className="text-[#1a2a3a]/60 font-black text-[10px] uppercase tracking-[0.2em]">
-                      {doc.specialite}
-                    </p>
+                    <h4 className="text-xl font-extrabold text-white">
+                      Dr. {doc.name}
+                    </h4>
+
+                    <div className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 px-3 py-2 text-xs font-bold text-[#B3CFE5]">
+                      <Stethoscope size={14} />
+                      {doc.specialite || specialite}
+                    </div>
+
+                   
+
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() =>
+                        navigate("/reserver-rdv", { state: { doctor: doc } })
+                      }
+                      className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1A3D63] via-[#4A7FA7] to-[#B3CFE5] py-3 text-sm font-extrabold text-white shadow-xl shadow-[#4A7FA7]/25 transition hover:scale-[1.01]"
+                    >
+                      <CalendarCheck size={17} />
+                      Prendre rendez-vous
+                    </motion.button>
                   </div>
-                  
-                  {/* --- l-T3dil hna f l-button --- */}
-                  
-<motion.button 
-  whileTap={{ scale: 0.95 }}
-  onClick={() => navigate("/reserver-rdv", { state: { doctor: doc } })} // n-sifto l-medecin f l-state
-  className="w-full py-5 bg-[#1a2a3a] text-white rounded-[25px] font-bold hover:bg-[#2c4a63] transition-all shadow-xl shadow-[#1a2a3a]/20 flex items-center justify-center gap-3 group"
->
-  <CalendarCheck size={18} className="group-hover:rotate-12 transition-transform" />
-  <span>Prendre Rendez-vous</span>
-</motion.button>
                 </motion.div>
               ))
             ) : (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="col-span-full py-32 bg-white/20 backdrop-blur-sm rounded-[50px] border-2 border-dashed border-[#1a2a3a]/10 text-center"
+                className="col-span-full rounded-[26px] border border-dashed border-[#B3CFE5]/25 bg-[#0F2745]/80 p-12 text-center shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl"
               >
-                <div className="bg-white/40 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-[#1a2a3a]/30">
-                   <User size={40} />
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 text-[#B3CFE5]">
+                  <User size={32} />
                 </div>
-                <p className="text-[#1a2a3a]/40 font-black text-xl tracking-tight px-6">
+
+                <p className="text-lg font-extrabold text-white">
                   Aucun médecin trouvé pour cette spécialité.
+                </p>
+
+                <p className="mt-2 text-sm text-[#B3CFE5]">
+                  Veuillez choisir une autre spécialité ou revenir plus tard.
                 </p>
               </motion.div>
             )}

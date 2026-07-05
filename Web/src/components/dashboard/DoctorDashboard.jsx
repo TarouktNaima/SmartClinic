@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   Clock3,
   Activity,
+  ShieldCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -30,29 +31,33 @@ export default function DoctorDashboard() {
 
   const menuItems = [
     {
-      title: "My Appointments",
-      description: "View and manage your medical appointments.",
+      title: "Mes rendez-vous",
+      description:
+        "Consultez et gérez facilement vos rendez-vous médicaux.",
       icon: CalendarDays,
       path: "/doctor/appointments",
       number: "01",
     },
     {
-      title: "My Patients",
-      description: "Access patients assigned to your medical care.",
+      title: "Mes patients",
+      description:
+        "Accédez aux patients suivis dans le cadre de votre activité médicale.",
       icon: Users,
       path: "/doctor/patients",
       number: "02",
     },
     {
-      title: "My Consultations",
-      description: "Review and manage your medical consultations.",
+      title: "Mes consultations",
+      description:
+        "Consultez et gérez l'ensemble de vos consultations médicales.",
       icon: ClipboardPlus,
       path: "/doctor/consultations",
       number: "03",
     },
     {
-      title: "My Profile",
-      description: "View and manage your professional information.",
+      title: "Mon profil",
+      description:
+        "Consultez et gérez vos informations professionnelles.",
       icon: UserRound,
       path: "/doctor/profile",
       number: "04",
@@ -64,245 +69,276 @@ export default function DoctorDashboard() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#07101f] text-white">
-      {/* BACKGROUND EFFECTS */}
+    <div className="min-h-screen overflow-hidden bg-[#0A1931] text-white">
+      <div className="relative min-h-screen">
+        {/* ANIMATION ARRIÈRE-PLAN */}
 
-      <motion.div
-        animate={{
-          x: [0, 100, 0],
-          y: [0, 60, 0],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-indigo-600/20 blur-[140px]"
-      />
+        <motion.div
+          animate={{
+            x: [0, 80, 0],
+            y: [0, -40, 0],
+          }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="pointer-events-none absolute -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]"
+        />
 
-      <motion.div
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -100, 0],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -bottom-40 -right-40 h-[550px] w-[550px] rounded-full bg-cyan-500/10 blur-[150px]"
-      />
+        <motion.div
+          animate={{
+            x: [0, -70, 0],
+            y: [0, 55, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="pointer-events-none absolute -bottom-44 -right-44 h-[380px] w-[380px] rounded-full bg-[#4A7FA7]/45 blur-[130px]"
+        />
 
-      <div className="relative z-10 min-h-screen">
-        {/* HEADER */}
+        <div className="relative z-10 min-h-screen">
+          {/* HEADER */}
 
-        <header className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur-2xl lg:px-12">
-          <div className="flex items-center gap-4">
-            <motion.div
-              whileHover={{ rotate: 8, scale: 1.05 }}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10"
-            >
-              <Stethoscope className="text-indigo-300" size={25} />
-            </motion.div>
+          <header className="border-b border-[#B3CFE5]/15 bg-[#0A1931]/75 px-5 py-4 backdrop-blur-xl lg:px-10">
+            <div className="mx-auto flex max-w-[1500px] items-center justify-between">
+              <div className="flex items-center gap-4">
+                <motion.div
+                  whileHover={{
+                    rotate: 8,
+                    scale: 1.05,
+                  }}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#1A3D63]/70 shadow-lg shadow-[#0A1931]/30"
+                >
+                  <Stethoscope
+                    className="text-[#B3CFE5]"
+                    size={23}
+                  />
+                </motion.div>
 
-            <div>
-              <h1 className="text-xl font-bold tracking-tight">
-                SmartClinic
-              </h1>
+                <div>
+                  <h1 className="text-xl font-extrabold tracking-tight text-white">
+                    Smart
+                    <span className="text-[#B3CFE5]">
+                      Clinic
+                    </span>
+                  </h1>
 
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
-                Doctor Workspace
-              </p>
-            </div>
-          </div>
+                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#B3CFE5]/60">
+                    Espace médecin
+                  </p>
+                </div>
+              </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden text-right sm:block">
-              <p className="font-semibold text-white">
-                Dr. {user.name || "Doctor"}
-              </p>
+              <div className="flex items-center gap-3">
+                <div className="hidden text-right sm:block">
+                  <p className="text-sm font-bold text-white">
+                    Dr. {user.name || "Médecin"}
+                  </p>
 
-              <p className="text-sm capitalize text-indigo-300">
-                {user.role || "doctor"}
-              </p>
-            </div>
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/10 font-bold text-indigo-200">
-              {(user.name || "D").charAt(0).toUpperCase()}
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleLogout}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10 text-red-300 transition hover:bg-red-500/20"
-              title="Logout"
-            >
-              <LogOut size={20} />
-            </motion.button>
-          </div>
-        </header>
-
-        {/* CONTENT */}
-
-        <main className="mx-auto max-w-[1500px] px-6 py-10 lg:px-12 lg:py-14">
-          {/* HERO */}
-
-          <motion.section
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.05] p-8 backdrop-blur-2xl lg:p-12"
-          >
-            <div className="absolute right-[-80px] top-[-100px] h-80 w-80 rounded-full bg-indigo-500/20 blur-[100px]" />
-
-            <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[1.4fr_0.6fr]">
-              <div>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-400/20 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-200">
-                  <Activity size={16} />
-
-                  Medical Workspace
+                  <p className="mt-0.5 text-xs font-semibold capitalize text-[#B3CFE5]">
+                    Médecin
+                  </p>
                 </div>
 
-                <p className="mb-3 text-sm uppercase tracking-[0.3em] text-indigo-300">
-                  Welcome back
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]/80 text-sm font-extrabold text-[#B3CFE5] shadow-lg shadow-[#0A1931]/20">
+                  {(user.name || "M")
+                    .charAt(0)
+                    .toUpperCase()}
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleLogout}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-red-400/15 bg-red-500/10 text-red-300 transition hover:bg-red-500/20"
+                  title="Se déconnecter"
+                >
+                  <LogOut size={19} />
+                </motion.button>
+              </div>
+            </div>
+          </header>
+
+          {/* CONTENU */}
+
+          <main className="mx-auto max-w-[1500px] px-5 py-8 lg:px-10 lg:py-10">
+            {/* HERO */}
+
+            <motion.section
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-gradient-to-br from-[#0A1931] via-[#102A4B] to-[#1A3D63] p-7 shadow-2xl shadow-[#0A1931]/40 lg:p-10"
+            >
+              <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#4A7FA7]/25 blur-[100px]" />
+
+              <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_0.6fr]">
+                <div>
+                  <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/45 px-4 py-2 text-xs font-bold text-[#B3CFE5]">
+                    <Activity size={15} />
+
+                    Espace médical
+                  </div>
+
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                    Bienvenue
+                  </p>
+
+                  <h2 className="max-w-4xl text-3xl font-extrabold leading-tight text-white md:text-4xl lg:text-5xl">
+                    Heureux de vous revoir,
+                    <span className="mt-1 block text-[#B3CFE5]">
+                      Dr. {user.name || "Médecin"}
+                    </span>
+                  </h2>
+
+                  <p className="mt-5 max-w-2xl text-sm leading-7 text-[#F6FAFD]/70 lg:text-base">
+                    Accédez à votre espace médical, gérez vos
+                    patients et suivez facilement votre activité
+                    clinique quotidienne.
+                  </p>
+                </div>
+
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="hidden justify-center lg:flex"
+                >
+                  <div className="relative flex h-56 w-56 items-center justify-center rounded-[45px] border border-[#B3CFE5]/20 bg-[#0A1931]/40 shadow-2xl shadow-[#0A1931]/30">
+                    <div className="absolute inset-8 rounded-full bg-[#4A7FA7]/25 blur-3xl" />
+
+                    <Stethoscope
+                      size={100}
+                      strokeWidth={1}
+                      className="relative text-[#B3CFE5]"
+                    />
+                  </div>
+                </motion.div>
+              </div>
+            </motion.section>
+
+            {/* INFORMATIONS RAPIDES */}
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25 }}
+              className="mt-6 flex flex-wrap items-center gap-3"
+            >
+              <div className="flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]/80 px-4 py-3 text-sm font-semibold text-[#B3CFE5]">
+                <Clock3 size={16} />
+
+                Espace médecin
+              </div>
+
+              <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-300">
+                <ShieldCheck size={16} />
+
+                Compte actif
+              </div>
+            </motion.div>
+
+            {/* MENU */}
+
+            <section className="mt-10">
+              <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                  Espace clinique
                 </p>
 
-                <h2 className="max-w-4xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
-                  Good to see you,
-                  <span className="block bg-gradient-to-r from-indigo-300 via-blue-300 to-cyan-300 bg-clip-text text-transparent">
-                    Dr. {user.name || "Doctor"}
-                  </span>
-                </h2>
+                <h3 className="mt-2 text-2xl font-extrabold text-white lg:text-3xl">
+                  Gérez votre activité
+                </h3>
 
-                <p className="mt-6 max-w-2xl text-base leading-7 text-slate-400 lg:text-lg">
-                  Access your medical workspace, manage your patients and
-                  follow your daily clinical activity.
+                <p className="mt-2 text-sm text-[#F6FAFD]/60">
+                  Accédez rapidement aux fonctionnalités de votre
+                  espace médical.
                 </p>
               </div>
 
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="hidden justify-center lg:flex"
-              >
-                <div className="relative flex h-64 w-64 items-center justify-center rounded-[60px] border border-white/10 bg-gradient-to-br from-indigo-500/20 to-cyan-500/5 shadow-2xl">
-                  <div className="absolute inset-8 rounded-full bg-indigo-500/20 blur-3xl" />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {menuItems.map((item, index) => {
+                  const Icon = item.icon;
 
-                  <Stethoscope
-                    size={115}
-                    strokeWidth={1}
-                    className="relative text-indigo-200"
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </motion.section>
+                  return (
+                    <motion.button
+                      key={item.title}
+                      type="button"
+                      initial={{
+                        opacity: 0,
+                        y: 25,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      transition={{
+                        delay: 0.12 * index,
+                        duration: 0.45,
+                      }}
+                      whileHover={{
+                        y: -6,
+                      }}
+                      whileTap={{
+                        scale: 0.98,
+                      }}
+                      onClick={() =>
+                        handleNavigation(item.path)
+                      }
+                      className="group relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 text-left shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl transition hover:border-[#4A7FA7]/60 lg:p-7"
+                    >
+                      <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#4A7FA7]/10 blur-[70px] transition duration-500 group-hover:bg-[#4A7FA7]/25" />
 
-          {/* QUICK INFO */}
+                      <div className="relative z-10">
+                        <div className="flex items-start justify-between">
+                          <motion.div
+                            whileHover={{ rotate: -5 }}
+                            className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#B3CFE5]/20 bg-[#1A3D63]/70"
+                          >
+                            <Icon
+                              size={27}
+                              strokeWidth={1.6}
+                              className="text-[#B3CFE5]"
+                            />
+                          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
-            className="mt-8 flex flex-wrap items-center gap-3"
-          >
-            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-300">
-              <Clock3 size={17} className="text-indigo-300" />
-              Doctor workspace
-            </div>
-
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
-              Account Active
-            </div>
-          </motion.div>
-
-          {/* MENU */}
-
-          <section className="mt-12">
-            <div className="mb-7">
-              <p className="text-sm uppercase tracking-[0.3em] text-indigo-300">
-                Clinical Workspace
-              </p>
-
-              <h3 className="mt-2 text-3xl font-bold">
-                Manage your activity
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {menuItems.map((item, index) => {
-                const Icon = item.icon;
-
-                return (
-                  <motion.button
-                    key={item.title}
-                    type="button"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.15 * index,
-                      duration: 0.5,
-                    }}
-                    whileHover={{
-                      y: -8,
-                      scale: 1.01,
-                    }}
-                    whileTap={{
-                      scale: 0.98,
-                    }}
-                    onClick={() => handleNavigation(item.path)}
-                    className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.06] p-7 text-left backdrop-blur-xl transition hover:border-indigo-400/30 hover:bg-white/[0.09] lg:p-8"
-                  >
-                    <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-[70px] transition duration-500 group-hover:bg-indigo-500/20" />
-
-                    <div className="relative z-10">
-                      <div className="flex items-start justify-between">
-                        <motion.div
-                          whileHover={{ rotate: -5 }}
-                          className="flex h-16 w-16 items-center justify-center rounded-[22px] border border-indigo-400/20 bg-indigo-500/10"
-                        >
-                          <Icon
-                            size={30}
-                            strokeWidth={1.6}
-                            className="text-indigo-200"
-                          />
-                        </motion.div>
-
-                        <span className="text-sm font-bold tracking-[0.2em] text-slate-600">
-                          {item.number}
-                        </span>
-                      </div>
-
-                      <div className="mt-10 flex items-end justify-between gap-5">
-                        <div>
-                          <h4 className="text-2xl font-bold text-white">
-                            {item.title}
-                          </h4>
-
-                          <p className="mt-3 max-w-md leading-7 text-slate-400">
-                            {item.description}
-                          </p>
+                          <span className="text-xs font-extrabold tracking-[0.2em] text-[#B3CFE5]/35">
+                            {item.number}
+                          </span>
                         </div>
 
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition group-hover:border-indigo-400/30 group-hover:bg-indigo-500/20">
-                          <ArrowUpRight
-                            size={21}
-                            className="text-slate-400 transition group-hover:text-indigo-200"
-                          />
+                        <div className="mt-8 flex items-end justify-between gap-5">
+                          <div>
+                            <h4 className="text-xl font-extrabold text-white lg:text-2xl">
+                              {item.title}
+                            </h4>
+
+                            <p className="mt-3 max-w-md text-sm leading-6 text-[#F6FAFD]/60">
+                              {item.description}
+                            </p>
+                          </div>
+
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/50 transition group-hover:bg-[#4A7FA7]">
+                            <ArrowUpRight
+                              size={19}
+                              className="text-[#B3CFE5] transition group-hover:text-white"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-          </section>
-        </main>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </section>
+          </main>
+        </div>
       </div>
     </div>
   );

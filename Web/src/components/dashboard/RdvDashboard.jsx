@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import {
   CalendarPlus,
   CalendarDays,
@@ -7,25 +8,37 @@ import {
   History,
   ArrowUpRight,
   Activity,
-  Clock3,
+  LogOut,
+  HeartPulse,
+  UserRound,
 } from "lucide-react";
 
 function RdvDashboard() {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+
+    toast.success("Déconnexion réussie");
+    navigate("/");
+  };
 
   const tools = [
     {
       id: "create-rdv",
-      title: "Prendre un Rendez-vous",
-      desc: "Choisir une spécialité, un médecin et réserver un créneau en ligne.",
+      title: "Prendre un rendez-vous",
+      desc: "Choisissez une spécialité, un médecin et réservez votre créneau.",
       icon: CalendarPlus,
       path: "/specialities",
       number: "01",
     },
     {
       id: "my-rdv",
-      title: "Mes Rendez-vous",
-      desc: "Consulter ou gérer vos consultations à venir.",
+      title: "Mes rendez-vous",
+      desc: "Consultez et gérez facilement vos prochains rendez-vous médicaux.",
       icon: CalendarDays,
       path: "/mes-rendezvous",
       number: "02",
@@ -33,7 +46,7 @@ function RdvDashboard() {
     {
       id: "history-rdv",
       title: "Historique",
-      desc: "Accéder à l’historique de vos consultations.",
+      desc: "Consultez l’historique de vos rendez-vous et consultations.",
       icon: History,
       path: "/dashboard/historique",
       number: "03",
@@ -41,7 +54,7 @@ function RdvDashboard() {
     {
       id: "dispo-slots",
       title: "Disponibilités",
-      desc: "Voir les horaires disponibles des médecins.",
+      desc: "Consultez les créneaux disponibles des médecins.",
       icon: CalendarCheck,
       path: "/dashboard/disponibilites",
       number: "04",
@@ -49,98 +62,153 @@ function RdvDashboard() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#07101f] text-white">
+    <div className="min-h-screen overflow-hidden bg-[#0A1931] text-white">
+      <div className="relative min-h-screen">
+        <motion.div
+          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]"
+        />
 
-      {/* BACKGROUND */}
-      <motion.div
-        animate={{ x: [0, 100, 0], y: [0, 60, 0] }}
-        transition={{ duration: 16, repeat: Infinity }}
-        className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-indigo-600/20 blur-[150px]"
-      />
+        <motion.div
+          animate={{ x: [0, -70, 0], y: [0, 55, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -bottom-44 -right-44 h-[380px] w-[380px] rounded-full bg-[#4A7FA7]/45 blur-[130px]"
+        />
 
-      <motion.div
-        animate={{ x: [0, -80, 0], y: [0, -80, 0] }}
-        transition={{ duration: 18, repeat: Infinity }}
-        className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full bg-cyan-500/10 blur-[150px]"
-      />
+        <main className="relative z-10 mx-auto max-w-7xl p-5 lg:p-8">
+          {/* Header simple */}
+          <header className="mb-7 flex flex-col gap-4 rounded-[24px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-4 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1A3D63] to-[#4A7FA7] text-white">
+                <HeartPulse size={25} />
+              </div>
 
-      <div className="relative z-10 px-6 py-10 lg:px-12">
-
-        {/* HERO */}
-        <motion.section
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.05] p-8 backdrop-blur-2xl lg:p-12"
-        >
-          <div className="absolute right-[-80px] top-[-100px] h-80 w-80 rounded-full bg-indigo-500/20 blur-[100px]" />
-
-          <div className="relative z-10">
-
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-400/20 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-200">
-              <Activity size={16} />
-              Patient Workspace
+              <div>
+                <h1 className="text-xl font-extrabold">
+                  Smart<span className="text-[#B3CFE5]">Clinic</span>
+                </h1>
+                <p className="text-xs font-semibold text-[#B3CFE5]">
+                  Espace patient
+                </p>
+              </div>
             </div>
 
-            <p className="mb-3 text-sm uppercase tracking-[0.3em] text-indigo-300">
-              Welcome
-            </p>
+            <div className="flex items-center justify-between gap-3 sm:justify-end">
+              <div className="flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/50 px-3 py-2">
+                <UserRound size={17} className="text-[#B3CFE5]" />
+                <span className="text-sm font-bold">
+                  {user?.name || "Patient"}
+                </span>
+              </div>
 
-            <h2 className="text-5xl font-bold leading-tight">
-              Gestion des
-              <span className="block bg-gradient-to-r from-indigo-300 via-blue-300 to-cyan-300 bg-clip-text text-transparent">
-                Rendez-vous
-              </span>
-            </h2>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2.5 text-sm font-bold text-red-300 transition hover:bg-red-500/20"
+              >
+                <LogOut size={17} />
+                Déconnexion
+              </button>
+            </div>
+          </header>
 
-            <p className="mt-6 max-w-2xl text-lg leading-7 text-slate-400">
-              Réservez et gérez vos rendez-vous médicaux facilement.
-            </p>
+          {/* Hero */}
+          <motion.section
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-gradient-to-br from-[#0A1931] via-[#102A4B] to-[#1A3D63] p-7 shadow-2xl shadow-[#0A1931]/40 lg:p-9"
+          >
+            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#4A7FA7]/20 blur-[90px]" />
 
-          </div>
-        </motion.section>
+            <div className="relative z-10">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/45 px-4 py-2 text-xs font-bold text-[#B3CFE5]">
+                <Activity size={16} />
+                Tableau de bord patient
+              </div>
 
-        {/* CARDS */}
-        <section className="mt-12">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                Gestion des rendez-vous
+              </p>
 
-            {tools.map((item, index) => {
-              const Icon = item.icon;
+              <h2 className="text-3xl font-extrabold tracking-tight text-white lg:text-4xl">
+                Gérez vos <span className="text-[#B3CFE5]">rendez-vous</span>
+              </h2>
 
-              return (
-                <motion.button
-                  key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.01 }}
-                  onClick={() => navigate(item.path)}
-                  className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.06] p-7 text-left backdrop-blur-xl hover:border-indigo-400/30 hover:bg-white/[0.09]"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-[22px] border border-indigo-400/20 bg-indigo-500/10">
-                      <Icon className="text-indigo-200" size={28} />
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#F6FAFD]/70">
+                Réservez, consultez et gérez vos rendez-vous médicaux facilement
+                depuis votre espace SmartClinic.
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Cards */}
+          <section className="mt-8">
+            <div className="mb-5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                Accès rapide
+              </p>
+
+              <h2 className="mt-1 text-2xl font-extrabold text-white">
+                Que souhaitez-vous faire ?
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {tools.map((item, index) => {
+                const Icon = item.icon;
+
+                return (
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.12 + index * 0.07,
+                    }}
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(item.path)}
+                    className="group relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 text-left shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl transition hover:border-[#4A7FA7]/60 hover:bg-[#102A4B]"
+                  >
+                    <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#4A7FA7]/10 blur-[60px] transition group-hover:bg-[#4A7FA7]/20" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#B3CFE5]/20 bg-[#1A3D63]/70 text-[#B3CFE5] transition group-hover:bg-[#4A7FA7] group-hover:text-white">
+                          <Icon size={25} />
+                        </div>
+
+                        <span className="text-xs font-extrabold tracking-[0.15em] text-[#B3CFE5]/35">
+                          {item.number}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-6 text-xl font-extrabold text-white">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 max-w-md text-sm leading-6 text-[#B3CFE5]/70">
+                        {item.desc}
+                      </p>
+
+                      <div className="mt-6 flex items-center justify-between border-t border-[#B3CFE5]/10 pt-4">
+                        <span className="text-xs font-bold text-[#B3CFE5]/60">
+                          Accéder
+                        </span>
+
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 text-[#B3CFE5] transition group-hover:bg-[#4A7FA7] group-hover:text-white">
+                          <ArrowUpRight size={18} />
+                        </div>
+                      </div>
                     </div>
-
-                    <span className="text-sm font-bold text-slate-600">
-                      {item.number}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-8 text-2xl font-bold">{item.title}</h3>
-
-                  <p className="mt-3 text-slate-400">{item.desc}</p>
-
-                  <div className="mt-8 flex items-center justify-end">
-                    <ArrowUpRight className="text-slate-400 group-hover:text-indigo-200" />
-                  </div>
-
-                </motion.button>
-              );
-            })}
-
-          </div>
-        </section>
-
+                  </motion.button>
+                );
+              })}
+            </div>
+          </section>
+        </main>
       </div>
     </div>
   );

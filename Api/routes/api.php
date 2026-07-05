@@ -33,6 +33,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    // ==========================
+    // Admins & Secretaries
+    // ==========================
+    Route::get('/admins', function () {
+        return response()->json([
+            'admins' => \App\Models\User::where('role', 'admin')->latest()->get()
+        ]);
+    });
+
+    Route::get('/secretaries', function () {
+        return response()->json([
+            'secretaries' => \App\Models\User::where('role', 'secretary')->latest()->get()
+        ]);
+    });
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'stats']);

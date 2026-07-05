@@ -44,17 +44,12 @@ export default function DoctorProfile() {
           },
         });
 
-        console.log("PROFILE RESPONSE:", profileResponse.data);
-
         doctorData =
           profileResponse.data?.doctor ||
           profileResponse.data?.data ||
           profileResponse.data;
       } catch (profileError) {
-        console.log(
-          "PROFILE ERROR:",
-          profileError.response?.data || profileError
-        );
+        console.log("PROFILE ERROR:", profileError.response?.data || profileError);
       }
 
       const doctorsResponse = await api.get("/doctors", {
@@ -63,8 +58,6 @@ export default function DoctorProfile() {
           Accept: "application/json",
         },
       });
-
-      console.log("DOCTORS RESPONSE:", doctorsResponse.data);
 
       let doctors = [];
 
@@ -76,48 +69,30 @@ export default function DoctorProfile() {
         doctors = doctorsResponse.data.data;
       }
 
-      const userEmail = user.email
-        ? user.email.trim().toLowerCase()
-        : "";
+      const userEmail = user.email ? user.email.trim().toLowerCase() : "";
 
       const userName = user.name
-        ? user.name
-            .replace(/^dr\.?\s*/i, "")
-            .trim()
-            .toLowerCase()
+        ? user.name.replace(/^dr\.?\s*/i, "").trim().toLowerCase()
         : "";
 
       const matchedDoctor = doctors.find((item) => {
-        const doctorEmail = item.email
-          ? item.email.trim().toLowerCase()
-          : "";
+        const doctorEmail = item.email ? item.email.trim().toLowerCase() : "";
 
         const doctorName = item.name
-          ? item.name
-              .replace(/^dr\.?\s*/i, "")
-              .trim()
-              .toLowerCase()
+          ? item.name.replace(/^dr\.?\s*/i, "").trim().toLowerCase()
           : "";
 
         const sameEmail =
-          userEmail !== "" &&
-          doctorEmail !== "" &&
-          doctorEmail === userEmail;
+          userEmail !== "" && doctorEmail !== "" && doctorEmail === userEmail;
 
         const sameUserId =
-          user.id &&
-          item.user_id &&
-          Number(item.user_id) === Number(user.id);
+          user.id && item.user_id && Number(item.user_id) === Number(user.id);
 
         const sameName =
-          userName !== "" &&
-          doctorName !== "" &&
-          doctorName === userName;
+          userName !== "" && doctorName !== "" && doctorName === userName;
 
         return sameEmail || sameUserId || sameName;
       });
-
-      console.log("MATCHED DOCTOR:", matchedDoctor);
 
       if (matchedDoctor) {
         doctorData = {
@@ -138,11 +113,7 @@ export default function DoctorProfile() {
 
       setDoctor(doctorData);
     } catch (error) {
-      console.log(
-        "DOCTOR PROFILE ERROR:",
-        error.response?.data || error
-      );
-
+      console.log("DOCTOR PROFILE ERROR:", error.response?.data || error);
       toast.error("Impossible de charger le profil");
     } finally {
       setLoading(false);
@@ -150,9 +121,7 @@ export default function DoctorProfile() {
   };
 
   const getPhotoUrl = () => {
-    if (!doctor?.photo) {
-      return null;
-    }
+    if (!doctor?.photo) return null;
 
     if (
       doctor.photo.startsWith("http://") ||
@@ -172,204 +141,197 @@ export default function DoctorProfile() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#07101f]">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0A1931]">
+        <motion.div
+          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]"
+        />
+
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{
-            duration: 1,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="h-12 w-12 rounded-full border-4 border-indigo-500/20 border-t-indigo-400"
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="h-12 w-12 rounded-full border-4 border-[#B3CFE5]/20 border-t-[#B3CFE5]"
         />
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#07101f] text-white">
-      <motion.div
-        animate={{
-          x: [0, 100, 0],
-          y: [0, 50, 0],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-indigo-600/20 blur-[140px]"
-      />
+    <div className="min-h-screen overflow-hidden bg-[#0A1931] text-white">
+      <div className="relative min-h-screen">
+        <motion.div
+          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]"
+        />
 
-      <motion.div
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -80, 0],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-[150px]"
-      />
+        <motion.div
+          animate={{ x: [0, -70, 0], y: [0, 55, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -bottom-44 -right-44 h-[380px] w-[380px] rounded-full bg-[#4A7FA7]/45 blur-[130px]"
+        />
 
-      <div className="relative z-10">
-        <header className="border-b border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur-2xl lg:px-12">
-          <div className="mx-auto flex max-w-[1400px] items-center justify-between">
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ x: -4 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate("/doctor-dashboard")}
-                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 transition hover:bg-white/10 hover:text-white"
-              >
-                <ArrowLeft size={20} />
-              </motion.button>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-indigo-300">
-                  SmartClinic
-                </p>
-
-                <h1 className="text-xl font-bold">
-                  Doctor Profile
-                </h1>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">
-              <Activity size={16} />
-              Active Account
-            </div>
-          </div>
-        </header>
-
-        <main className="mx-auto max-w-[1400px] px-6 py-12 lg:px-12">
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="grid gap-8 lg:grid-cols-[420px_1fr]"
-          >
-            <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.06] p-8 backdrop-blur-2xl">
-              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/20 blur-[90px]" />
-
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <motion.div
-                  whileHover={{ scale: 1.04 }}
-                  className="relative"
+        <div className="relative z-10">
+          <header className="border-b border-[#B3CFE5]/15 bg-[#0A1931]/75 px-5 py-4 backdrop-blur-xl lg:px-10">
+            <div className="mx-auto flex max-w-[1400px] items-center justify-between">
+              <div className="flex items-center gap-4">
+                <motion.button
+                  whileHover={{ x: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate("/doctor-dashboard")}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]/80 text-[#B3CFE5] shadow-lg shadow-[#0A1931]/20 transition hover:bg-[#1A3D63] hover:text-white"
                 >
-                  <div className="absolute inset-0 rounded-[40px] bg-indigo-500/30 blur-3xl" />
+                  <ArrowLeft size={20} />
+                </motion.button>
 
-                  {photoUrl ? (
-                    <img
-                      src={photoUrl}
-                      alt={doctor?.name || "Doctor"}
-                      onError={(e) => {
-                        console.log(
-                          "PHOTO ERROR:",
-                          e.currentTarget.src
-                        );
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#B3CFE5]">
+                    SmartClinic
+                  </p>
 
-                        e.currentTarget.style.display = "none";
-                      }}
-                      className="relative h-48 w-48 rounded-[40px] border border-white/20 object-cover shadow-2xl"
-                    />
-                  ) : (
-                    <div className="relative flex h-48 w-48 items-center justify-center rounded-[40px] border border-white/20 bg-indigo-500/10 shadow-2xl">
-                      <UserRound
-                        size={80}
-                        strokeWidth={1}
-                        className="text-indigo-200"
-                      />
-                    </div>
-                  )}
-
-                  <div className="absolute -bottom-2 -right-2 flex h-12 w-12 items-center justify-center rounded-2xl border-4 border-[#07101f] bg-emerald-500">
-                    <ShieldCheck size={22} />
-                  </div>
-                </motion.div>
-
-                <p className="mt-8 text-sm uppercase tracking-[0.3em] text-indigo-300">
-                  Medical Professional
-                </p>
-
-                <h2 className="mt-3 text-3xl font-bold">
-                  Dr. {doctor?.name || user.name || "Doctor"}
-                </h2>
-
-                <div className="mt-4 flex items-center gap-2 rounded-full border border-indigo-400/20 bg-indigo-500/10 px-4 py-2 text-indigo-200">
-                  <Stethoscope size={17} />
-
-                  {doctor?.specialite || "Doctor"}
+                  <h1 className="text-xl font-extrabold text-white">
+                    Profil médecin
+                  </h1>
                 </div>
               </div>
-            </div>
 
-            <div className="rounded-[40px] border border-white/10 bg-white/[0.06] p-8 backdrop-blur-2xl lg:p-10">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-indigo-300">
-                  Professional Information
-                </p>
-
-                <h3 className="mt-3 text-3xl font-bold">
-                  Personal Details
-                </h3>
-
-                <p className="mt-3 text-slate-400">
-                  Your professional and medical account information.
-                </p>
-              </div>
-
-              <div className="mt-10 grid gap-5 md:grid-cols-2">
-                <InfoCard
-                  icon={UserRound}
-                  label="Full Name"
-                  value={`Dr. ${
-                    doctor?.name ||
-                    user.name ||
-                    "N/A"
-                  }`}
-                />
-
-                <InfoCard
-                  icon={Stethoscope}
-                  label="Speciality"
-                  value={doctor?.specialite || "N/A"}
-                />
-
-                <InfoCard
-                  icon={Mail}
-                  label="Email Address"
-                  value={
-                    doctor?.email ||
-                    user.email ||
-                    "N/A"
-                  }
-                />
-
-                <InfoCard
-                  icon={Phone}
-                  label="Phone Number"
-                  value={doctor?.phone || "N/A"}
-                />
-
-                <InfoCard
-                  icon={ShieldCheck}
-                  label="Account Role"
-                  value={user.role || "doctor"}
-                />
-
-                <InfoCard
-                  icon={Activity}
-                  label="Account Status"
-                  value="Active"
-                />
+              <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-300">
+                <Activity size={16} />
+                Compte actif
               </div>
             </div>
-          </motion.div>
-        </main>
+          </header>
+
+          <main className="mx-auto max-w-[1400px] px-5 py-10 lg:px-10">
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="mb-8 overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-gradient-to-br from-[#0A1931] via-[#102A4B] to-[#1A3D63] p-6 shadow-2xl shadow-[#0A1931]/40"
+            >
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                Espace médecin
+              </p>
+
+              <h2 className="text-2xl font-extrabold text-white lg:text-3xl">
+                Informations du profil
+              </h2>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#F6FAFD]/75">
+                Consultez vos informations professionnelles enregistrées dans
+                SmartClinic.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55 }}
+              className="grid gap-8 lg:grid-cols-[420px_1fr]"
+            >
+              <div className="relative overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-8 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl">
+                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#4A7FA7]/20 blur-[90px]" />
+
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <motion.div whileHover={{ scale: 1.04 }} className="relative">
+                    <div className="absolute inset-0 rounded-[36px] bg-[#4A7FA7]/25 blur-3xl" />
+
+                    {photoUrl ? (
+                      <img
+                        src={photoUrl}
+                        alt={doctor?.name || "Médecin"}
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                        className="relative h-48 w-48 rounded-[36px] border border-[#B3CFE5]/25 object-cover shadow-2xl"
+                      />
+                    ) : (
+                      <div className="relative flex h-48 w-48 items-center justify-center rounded-[36px] border border-[#B3CFE5]/25 bg-[#102A4B] shadow-2xl">
+                        <UserRound
+                          size={80}
+                          strokeWidth={1}
+                          className="text-[#B3CFE5]"
+                        />
+                      </div>
+                    )}
+
+                    <div className="absolute -bottom-2 -right-2 flex h-12 w-12 items-center justify-center rounded-2xl border-4 border-[#0F2745] bg-emerald-500 text-white">
+                      <ShieldCheck size={22} />
+                    </div>
+                  </motion.div>
+
+                  <p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-[#B3CFE5]">
+                    Professionnel médical
+                  </p>
+
+                  <h2 className="mt-3 text-3xl font-extrabold text-white">
+                    Dr. {doctor?.name || user.name || "Médecin"}
+                  </h2>
+
+                  <div className="mt-4 flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 px-4 py-2 text-sm font-bold text-[#B3CFE5]">
+                    <Stethoscope size={17} />
+                    {doctor?.specialite || "Médecin"}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-8 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl lg:p-10">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+                    Informations professionnelles
+                  </p>
+
+                  <h3 className="mt-3 text-3xl font-extrabold text-white">
+                    Détails personnels
+                  </h3>
+
+                  <p className="mt-3 text-sm text-[#F6FAFD]/65">
+                    Informations liées à votre compte médical et professionnel.
+                  </p>
+                </div>
+
+                <div className="mt-10 grid gap-5 md:grid-cols-2">
+                  <InfoCard
+                    icon={UserRound}
+                    label="Nom complet"
+                    value={`Dr. ${doctor?.name || user.name || "N/A"}`}
+                  />
+
+                  <InfoCard
+                    icon={Stethoscope}
+                    label="Spécialité"
+                    value={doctor?.specialite || "N/A"}
+                  />
+
+                  <InfoCard
+                    icon={Mail}
+                    label="Adresse e-mail"
+                    value={doctor?.email || user.email || "N/A"}
+                  />
+
+                  <InfoCard
+                    icon={Phone}
+                    label="Téléphone"
+                    value={doctor?.phone || "N/A"}
+                  />
+
+                  <InfoCard
+                    icon={ShieldCheck}
+                    label="Rôle du compte"
+                    value={user.role || "doctor"}
+                  />
+
+                  <InfoCard
+                    icon={Activity}
+                    label="Statut du compte"
+                    value="Actif"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </main>
+        </div>
       </div>
     </div>
   );
@@ -379,24 +341,17 @@ function InfoCard({ icon: Icon, label, value }) {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="group rounded-[28px] border border-white/10 bg-white/[0.04] p-5 transition hover:border-indigo-400/20 hover:bg-white/[0.07]"
+      className="group rounded-[22px] border border-[#B3CFE5]/20 bg-[#0A1931]/55 p-5 transition hover:border-[#4A7FA7]/60 hover:bg-[#1A3D63]/40"
     >
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
-          <Icon
-            size={21}
-            className="text-indigo-200"
-          />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]">
+          <Icon size={21} className="text-[#B3CFE5]" />
         </div>
 
         <div className="min-w-0">
-          <p className="text-sm text-slate-500">
-            {label}
-          </p>
+          <p className="text-sm font-semibold text-[#B3CFE5]/70">{label}</p>
 
-          <p className="mt-1 break-words font-semibold text-white">
-            {value}
-          </p>
+          <p className="mt-1 break-words font-bold text-white">{value}</p>
         </div>
       </div>
     </motion.div>

@@ -1,191 +1,301 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Calendar, Clock, User, Building, ShieldCheck, Search } from "lucide-react";
+import {
+  Clock,
+  User,
+  Building,
+  ShieldCheck,
+  Search,
+  CalendarDays,
+  ArrowLeft,
+} from "lucide-react";
 import api from "../../api/axios";
 
 function DispoSlots() {
+  const navigate = useNavigate();
+
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 1. Horaires d'ouverture fixes de la clinique
   const cliniqueHoraires = [
     { jour: "Lundi", heures: "08:00 - 19:00", statut: "Ouvert" },
     { jour: "Mardi", heures: "08:00 - 19:00", statut: "Ouvert" },
     { jour: "Mercredi", heures: "08:00 - 19:00", statut: "Ouvert" },
     { jour: "Jeudi", heures: "08:00 - 19:00", statut: "Ouvert" },
     { jour: "Vendredi", heures: "08:00 - 18:00", statut: "Ouvert" },
-    { jour: "Samedi", heures: "08:30 - 13:00", statut: "Urgence Uniquement" },
+    {
+      jour: "Samedi",
+      heures: "08:30 - 13:00",
+      statut: "Urgence uniquement",
+    },
     { jour: "Dimanche", heures: "Fermé", statut: "Fermé" },
   ];
 
-  // Plannings par défaut des médecins (Fallback si l'API ne fournit pas les jours)
-  const joursSemaine = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+  const joursSemaine = [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+  ];
 
-  // 2. Récupération des médecins depuis l'API au chargement
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const res = await api.get("/doctors");
-        setDoctors(res.data.data || res.data);
+
+        setDoctors(res.data.data || res.data || []);
       } catch (err) {
-        console.error("Erreur lors de la récupération des médecins:", err);
+        console.error(
+          "Erreur lors de la récupération des médecins :",
+          err
+        );
       }
     };
+
     fetchDoctors();
   }, []);
 
-  // Filtrage des médecins pour la barre de recherche
   const filteredDoctors = doctors.filter((doc) =>
-    doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+    doc.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#82BCE0] via-[#CAE3F0] to-[#F3F9FC] p-6 md:p-12">
-      <div className="w-full max-w-7xl mx-auto space-y-10">
-        
-        {/* EN-TÊTE DE LA PAGE */}
-        <div className="border-b border-gray-300 pb-4">
-          <h2 className="text-3xl font-bold text-[#1a2a3a] flex items-center gap-3">
-            Horaires & Plannings de la Clinique 📅
-          </h2>
-          <p className="text-[#1a2a3a]/60 text-sm mt-1">
-            Consultez les heures d'ouverture générales ainsi que la disponibilité hebdomadaire de nos praticiens.
-          </p>
-        </div>
+    <div className="min-h-screen overflow-hidden bg-[#0A1931] px-5 py-8 text-white md:px-10">
+      <div className="relative mx-auto max-w-7xl">
+        {/* Animation arrière-plan */}
+        <motion.div
+          animate={{
+            x: [0, 80, 0],
+            y: [0, -40, 0],
+          }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="pointer-events-none fixed -left-44 -top-44 h-[380px] w-[380px] rounded-full bg-[#1A3D63]/60 blur-[120px]"
+        />
 
-        {/* SECTION 1 : HORAIRES GÉNÉRAUX DE LA CLINIQUE */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          
-          <div className="lg:col-span-1 bg-white/80 backdrop-blur-xl p-6 rounded-[30px] shadow-xl border border-white/50">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <Building size={20} className="text-blue-500" /> Heures d'Ouverture
+        <motion.div
+          animate={{
+            x: [0, -70, 0],
+            y: [0, 55, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="pointer-events-none fixed -bottom-44 -right-44 h-[380px] w-[380px] rounded-full bg-[#4A7FA7]/45 blur-[130px]"
+        />
+
+        {/* Bouton retour */}
+        <motion.button
+          initial={{ opacity: 0, x: -15 }}
+          animate={{ opacity: 1, x: 0 }}
+          whileHover={{ x: -4 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => navigate(-1)}
+          className="relative z-10 mb-6 flex items-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#102A4B]/80 px-4 py-3 text-sm font-bold text-[#B3CFE5] shadow-lg shadow-[#0A1931]/20 transition hover:bg-[#1A3D63] hover:text-white"
+        >
+          <ArrowLeft size={18} />
+          Retour
+        </motion.button>
+
+        {/* En-tête */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="relative z-10 mb-8 overflow-hidden rounded-[26px] border border-[#B3CFE5]/20 bg-gradient-to-br from-[#0A1931] via-[#102A4B] to-[#1A3D63] p-6 shadow-2xl shadow-[#0A1931]/40"
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
+            Disponibilités
+          </p>
+
+          <h1 className="flex items-center gap-3 text-2xl font-extrabold text-white lg:text-3xl">
+            <CalendarDays className="text-[#B3CFE5]" size={28} />
+            Horaires et plannings
+          </h1>
+
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#F6FAFD]/75">
+            Consultez les heures d'ouverture de la clinique ainsi que les
+            disponibilités hebdomadaires des médecins.
+          </p>
+        </motion.div>
+
+        <div className="relative z-10 grid grid-cols-1 gap-7 lg:grid-cols-3">
+          {/* Horaires clinique */}
+          <motion.div
+            initial={{ opacity: 0, x: -22 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45 }}
+            className="rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl lg:col-span-1"
+          >
+            <h3 className="mb-5 flex items-center gap-2 text-xl font-extrabold text-white">
+              <Building size={21} className="text-[#B3CFE5]" />
+              Heures d'ouverture
             </h3>
+
             <div className="space-y-3">
               {cliniqueHoraires.map((item) => (
-                <div 
-                  key={item.jour} 
-                  className={`flex justify-between items-center p-3 rounded-xl border text-sm font-medium ${
-                    item.statut === "Fermé" 
-                      ? "bg-red-50/50 border-red-100 text-red-700" 
-                      : item.statut === "Urgence Uniquement"
-                      ? "bg-amber-50/50 border-amber-100 text-amber-700"
-                      : "bg-white border-gray-100 text-gray-700"
-                  }`}
+                <div
+                  key={item.jour}
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-[#B3CFE5]/15 bg-[#0A1931]/45 p-3"
                 >
-                  <span>{item.jour}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs opacity-80">{item.heures}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      item.statut === "Ouvert" ? "bg-green-100 text-green-800" : "bg-opacity-20"
-                    }`}>
-                      {item.statut}
-                    </span>
+                  <div>
+                    <p className="text-sm font-bold text-white">
+                      {item.jour}
+                    </p>
+
+                    <p className="mt-1 text-xs text-[#B3CFE5]">
+                      {item.heures}
+                    </p>
                   </div>
+
+                  <span
+                    className={`rounded-full border px-3 py-1 text-[10px] font-extrabold ${
+                      item.statut === "Fermé"
+                        ? "border-red-400/20 bg-red-500/10 text-red-300"
+                        : item.statut === "Urgence uniquement"
+                        ? "border-amber-400/20 bg-amber-500/10 text-amber-300"
+                        : "border-emerald-400/20 bg-emerald-500/10 text-emerald-300"
+                    }`}
+                  >
+                    {item.statut}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* SECTION 2 : RECHERCHE ET PLANNINGS INDIVIDUELS DES MÉDECINS */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white/80 backdrop-blur-xl p-6 rounded-[30px] shadow-xl border border-white/50">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <User size={20} className="text-purple-500" /> Disponibilités des Médecins
-              </h3>
+          {/* Disponibilités médecins */}
+          <motion.div
+            initial={{ opacity: 0, x: 22 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45 }}
+            className="rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl lg:col-span-2"
+          >
+            <h3 className="mb-5 flex items-center gap-2 text-xl font-extrabold text-white">
+              <User size={21} className="text-[#B3CFE5]" />
+              Disponibilités des médecins
+            </h3>
 
-              {/* Barre de recherche médecin */}
-              <div className="relative mb-6">
-                <Search className="absolute left-4 top-3.5 text-gray-400" size={18} />
-                <input
-                  type="text"
-                  placeholder="Rechercher un médecin pour voir son planning..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm font-medium"
-                />
-              </div>
+            {/* Recherche */}
+            <div className="relative mb-6">
+              <Search
+                className="absolute left-4 top-3.5 text-[#B3CFE5]"
+                size={18}
+              />
 
-              {/* Grille de sélection rapide des médecins */}
-              <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-thin">
+              <input
+                type="text"
+                placeholder="Rechercher un médecin..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-[#B3CFE5]/50 focus:border-[#4A7FA7]/70"
+              />
+            </div>
+
+            {/* Sélection médecin */}
+            <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+              <button
+                onClick={() => setSelectedDoctor("")}
+                className={`whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-extrabold transition ${
+                  selectedDoctor === ""
+                    ? "border-[#B3CFE5]/30 bg-gradient-to-r from-[#1A3D63] to-[#4A7FA7] text-white"
+                    : "border-[#B3CFE5]/20 bg-[#0A1931]/55 text-[#B3CFE5] hover:bg-[#1A3D63]"
+                }`}
+              >
+                Vue d'ensemble
+              </button>
+
+              {filteredDoctors.map((doc) => (
                 <button
-                  onClick={() => setSelectedDoctor("")}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all whitespace-nowrap ${
-                    selectedDoctor === ""
-                      ? "bg-[#1a2a3a] text-white border-[#1a2a3a]"
-                      : "bg-white text-gray-600 border-gray-100 hover:border-gray-300"
+                  key={doc.id}
+                  onClick={() => setSelectedDoctor(doc.id)}
+                  className={`whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-extrabold transition ${
+                    selectedDoctor === doc.id
+                      ? "border-[#B3CFE5]/30 bg-gradient-to-r from-[#1A3D63] to-[#4A7FA7] text-white"
+                      : "border-[#B3CFE5]/20 bg-[#0A1931]/55 text-[#B3CFE5] hover:bg-[#1A3D63]"
                   }`}
                 >
-                  Vue d'ensemble
+                  Dr. {doc.name}
                 </button>
-                {filteredDoctors.map((doc) => (
-                  <button
-                    key={doc.id}
-                    onClick={() => setSelectedDoctor(doc.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all whitespace-nowrap ${
-                      selectedDoctor === doc.id
-                        ? "bg-blue-500 text-white border-blue-500"
-                        : "bg-white text-gray-600 border-gray-100 hover:border-gray-300"
-                    }`}
-                  >
-                    Dr. {doc.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* Affichage du planning sous forme de grille de présence */}
-              <div className="space-y-4">
-                {doctors
-                  .filter((d) => selectedDoctor === "" || d.id === selectedDoctor)
-                  .map((doc) => (
-                    <motion.div
-                      key={doc.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-bold text-gray-800 text-base">Dr. {doc.name}</h4>
-                          <p className="text-xs text-purple-600 font-semibold">{doc.specialite || "Médecine Générale"}</p>
-                        </div>
-                        <span className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-bold">
-                          <ShieldCheck size={12} /> Actif
-                        </span>
-                      </div>
-
-                      {/* Jours de présence */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-2">
-                        {joursSemaine.map((jour) => {
-                          // Simulation de jours d'absence alternés (Ex: Samedi après-midi ou mercredi selon logique)
-                          const estPresent = jour !== "Samedi" || doc.id % 2 === 0; 
-                          
-                          return (
-                            <div
-                              key={jour}
-                              className={`p-2.5 rounded-xl border text-center flex flex-col items-center justify-center gap-1 transition-all ${
-                                estPresent
-                                  ? "bg-emerald-50/40 border-emerald-100 text-emerald-800"
-                                  : "bg-gray-50 border-gray-200 text-gray-400"
-                              }`}
-                            >
-                              <span className="text-xs font-bold">{jour}</span>
-                              <span className="text-[10px] opacity-80 flex items-center gap-0.5">
-                                <Clock size={10} /> {estPresent ? "09:00 - 17:00" : "Absent"}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  ))}
-              </div>
-
+              ))}
             </div>
-          </div>
 
+            {/* Planning médecins */}
+            <div className="space-y-4">
+              {doctors
+                .filter(
+                  (doctor) =>
+                    selectedDoctor === "" ||
+                    doctor.id === selectedDoctor
+                )
+                .map((doc, index) => (
+                  <motion.div
+                    key={doc.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.04 }}
+                    className="rounded-[22px] border border-[#B3CFE5]/15 bg-[#0A1931]/45 p-4 transition hover:bg-[#1A3D63]/35"
+                  >
+                    <div className="mb-4 flex items-center justify-between gap-4">
+                      <div>
+                        <h4 className="font-extrabold text-white">
+                          Dr. {doc.name}
+                        </h4>
+
+                        <p className="mt-1 text-xs font-bold text-[#B3CFE5]">
+                          {doc.specialite || "Médecine générale"}
+                        </p>
+                      </div>
+
+                      <span className="flex items-center gap-1 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-extrabold text-emerald-300">
+                        <ShieldCheck size={12} />
+                        Actif
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
+                      {joursSemaine.map((jour) => {
+                        const estPresent =
+                          jour !== "Samedi" || doc.id % 2 === 0;
+
+                        return (
+                          <div
+                            key={jour}
+                            className={`rounded-xl border p-2.5 text-center ${
+                              estPresent
+                                ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-300"
+                                : "border-[#B3CFE5]/10 bg-[#102A4B]/60 text-[#B3CFE5]/50"
+                            }`}
+                          >
+                            <span className="text-xs font-extrabold">
+                              {jour}
+                            </span>
+
+                            <span className="mt-1 flex items-center justify-center gap-1 text-[10px]">
+                              <Clock size={10} />
+
+                              {estPresent
+                                ? "09:00 - 17:00"
+                                : "Absent"}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ))}
+            </div>
+          </motion.div>
         </div>
-
       </div>
     </div>
   );

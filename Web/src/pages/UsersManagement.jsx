@@ -7,41 +7,48 @@ import {
   Pencil,
   Trash2,
   X,
-  Stethoscope,
+  ShieldCheck,
   ChevronLeft,
   ChevronRight,
+  UserRound,
   Mail,
   Phone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import Sidebar from "../../components/dashboard/Sidebar";
-import Header from "../../components/dashboard/Header";
-import LoadingSpinner from "../../components/dashboard/LoadingSpinner";
-import EmptyState from "../../components/dashboard/EmptyState";
+import Sidebar from "../components/dashboard/Sidebar";
+import Header from "../components/dashboard/Header";
+import LoadingSpinner from "../components/dashboard/LoadingSpinner";
+import EmptyState from "../components/dashboard/EmptyState";
 
-export default function DoctorsManagement() {
+export default function UsersManagement({
+  title,
+  subtitle,
+  searchPlaceholder,
+  emptyText,
+  apiUrl,
+  roleName,
+}) {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const role = user.role || localStorage.getItem("role") || "admin";
 
-  const [doctors, setDoctors] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const [editDoctor, setEditDoctor] = useState(null);
-  const [deleteDoctor, setDeleteDoctor] = useState(null);
+  const [editUser, setEditUser] = useState(null);
+  const [deleteUser, setDeleteUser] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
-    specialite: "",
   });
 
   useEffect(() => {
@@ -55,91 +62,86 @@ export default function DoctorsManagement() {
       return;
     }
 
-    getDoctors();
+    getUsers();
   }, []);
 
-  const getDoctors = async () => {
+  const getUsers = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/doctors", {
+      const res = await axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
       });
 
-      setDoctors(res.data.doctors || res.data || []);
+      setUsers(
+        res.data.users ||
+          res.data.admins ||
+          res.data.secretaries ||
+          res.data ||
+          []
+      );
     } catch (error) {
-      toast.error("Erreur lors du chargement des médecins");
+      toast.error("Erreur lors du chargement");
     } finally {
       setLoading(false);
     }
   };
 
-  const openEdit = (doctor) => {
-    setEditDoctor(doctor);
+  const openEdit = (item) => {
+    setEditUser(item);
     setForm({
-      name: doctor.name || "",
-      email: doctor.email || "",
-      phone: doctor.phone || "",
-      specialite: doctor.specialite || "",
+      name: item.name || "",
+      email: item.email || "",
+      phone: item.phone || "",
     });
   };
 
-  const updateDoctor = async (e) => {
+  const updateUser = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.put(
-        `http://127.0.0.1:8000/api/doctors/${editDoctor.id}`,
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+      await axios.put(`${apiUrl}/${editUser.id}`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
 
-      toast.success("Médecin modifié avec succès");
-      setEditDoctor(null);
-      getDoctors();
+      toast.success(`${roleName} modifié avec succès`);
+      setEditUser(null);
+      getUsers();
     } catch (error) {
-      console.log(error.response?.data);
       toast.error("Erreur lors de la modification");
     }
   };
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/doctors/${deleteDoctor.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+      await axios.delete(`${apiUrl}/${deleteUser.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
 
-      toast.success("Médecin supprimé avec succès");
-      setDeleteDoctor(null);
-      getDoctors();
+      toast.success(`${roleName} supprimé avec succès`);
+      setDeleteUser(null);
+      getUsers();
     } catch (error) {
       toast.error("Erreur lors de la suppression");
     }
   };
 
-  const filteredDoctors = doctors.filter((doctor) =>
-    `${doctor.name || ""} ${doctor.email || ""} ${doctor.phone || ""} ${
-      doctor.specialite || ""
-    }`
+  const filteredUsers = users.filter((item) =>
+    `${item.name || ""} ${item.email || ""} ${item.phone || ""}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredDoctors.length / perPage) || 1;
+  const totalPages = Math.ceil(filteredUsers.length / perPage) || 1;
 
-  const displayedDoctors = filteredDoctors.slice(
+  const displayedUsers = filteredUsers.slice(
     (page - 1) * perPage,
     page * perPage
   );
@@ -175,15 +177,15 @@ export default function DoctorsManagement() {
               <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#B3CFE5]">
-                    Gestion des médecins
+                    Gestion des utilisateurs
                   </p>
 
                   <h1 className="text-2xl font-extrabold text-white lg:text-3xl">
-                    Liste des médecins
+                    {title}
                   </h1>
 
                   <p className="mt-2 text-sm text-[#F6FAFD]/75">
-                    Recherchez, modifiez et gérez les médecins de la clinique.
+                    {subtitle}
                   </p>
                 </div>
 
@@ -191,7 +193,7 @@ export default function DoctorsManagement() {
                   <Search className="text-[#B3CFE5]" size={19} />
                   <input
                     type="text"
-                    placeholder="Rechercher un médecin..."
+                    placeholder={searchPlaceholder}
                     value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);
@@ -203,38 +205,40 @@ export default function DoctorsManagement() {
               </div>
             </div>
 
-            {displayedDoctors.length === 0 ? (
+            {displayedUsers.length === 0 ? (
               <div className="rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 backdrop-blur-xl">
-                <EmptyState text="Aucun médecin trouvé." />
+                <EmptyState text={emptyText} />
               </div>
             ) : (
               <>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                  {displayedDoctors.map((doctor) => (
+                  {displayedUsers.map((item) => (
                     <motion.div
-                      key={doctor.id}
+                      key={item.id}
                       whileHover={{ y: -6 }}
                       className="rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745]/80 p-6 shadow-xl shadow-[#0A1931]/25 backdrop-blur-xl transition"
                     >
                       <div className="flex items-center gap-4">
                         <img
-                          src={
-                            doctor.photo
-                              ? `http://127.0.0.1:8000/storage/doctors/${doctor.photo}`
-                              : `https://ui-avatars.com/api/?name=${doctor.name}`
-                          }
-                          alt={doctor.name}
+                          src={`https://ui-avatars.com/api/?name=${
+                            item.name || roleName
+                          }&background=102A4B&color=B3CFE5`}
+                          alt={item.name}
                           className="h-16 w-16 rounded-2xl border border-[#B3CFE5]/20 object-cover"
                         />
 
                         <div>
                           <h3 className="text-lg font-extrabold text-white">
-                            {doctor.name}
+                            {item.name}
                           </h3>
 
                           <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-[#B3CFE5]">
-                            <Stethoscope size={15} />
-                            {doctor.specialite || "Spécialité"}
+                            {roleName === "Admin" ? (
+                              <ShieldCheck size={15} />
+                            ) : (
+                              <UserRound size={15} />
+                            )}
+                            {roleName}
                           </p>
                         </div>
                       </div>
@@ -243,21 +247,21 @@ export default function DoctorsManagement() {
                         <p className="flex items-center gap-2 text-[#B3CFE5]">
                           <Mail size={15} />
                           <span className="text-white">
-                            {doctor.email || "Non disponible"}
+                            {item.email || "Non disponible"}
                           </span>
                         </p>
 
                         <p className="flex items-center gap-2 text-[#B3CFE5]">
                           <Phone size={15} />
                           <span className="text-white">
-                            {doctor.phone || "Non disponible"}
+                            {item.phone || "Non disponible"}
                           </span>
                         </p>
                       </div>
 
                       <div className="mt-6 flex gap-3">
                         <button
-                          onClick={() => openEdit(doctor)}
+                          onClick={() => openEdit(item)}
                           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#B3CFE5]/20 bg-[#1A3D63]/70 py-3 text-sm font-bold text-[#B3CFE5] transition hover:bg-[#4A7FA7] hover:text-white"
                         >
                           <Pencil size={17} />
@@ -265,7 +269,7 @@ export default function DoctorsManagement() {
                         </button>
 
                         <button
-                          onClick={() => setDeleteDoctor(doctor)}
+                          onClick={() => setDeleteUser(item)}
                           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-400/15 bg-red-500/10 py-3 text-sm font-bold text-red-300 transition hover:bg-red-500/20"
                         >
                           <Trash2 size={17} />
@@ -302,10 +306,10 @@ export default function DoctorsManagement() {
           </motion.div>
         </main>
 
-        {editDoctor && (
+        {editUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1931]/85 p-4 backdrop-blur-sm">
             <form
-              onSubmit={updateDoctor}
+              onSubmit={updateUser}
               className="w-full max-w-lg rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745] p-6 shadow-2xl"
             >
               <div className="mb-6 flex items-center justify-between">
@@ -313,14 +317,15 @@ export default function DoctorsManagement() {
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#B3CFE5]">
                     Modification
                   </p>
+
                   <h2 className="mt-1 text-xl font-extrabold text-white">
-                    Modifier le médecin
+                    Modifier {roleName}
                   </h2>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setEditDoctor(null)}
+                  onClick={() => setEditUser(null)}
                   className="rounded-xl bg-[#0A1931]/70 p-2 text-[#B3CFE5] transition hover:bg-[#1A3D63]"
                 >
                   <X />
@@ -331,7 +336,6 @@ export default function DoctorsManagement() {
                 ["name", "Nom complet"],
                 ["email", "Adresse e-mail"],
                 ["phone", "Téléphone"],
-                ["specialite", "Spécialité"],
               ].map(([field, label]) => (
                 <input
                   key={field}
@@ -352,7 +356,7 @@ export default function DoctorsManagement() {
           </div>
         )}
 
-        {deleteDoctor && (
+        {deleteUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1931]/85 p-4 backdrop-blur-sm">
             <div className="w-full max-w-md rounded-[26px] border border-[#B3CFE5]/20 bg-[#0F2745] p-6 text-center shadow-2xl">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-red-400/20 bg-red-500/10 text-red-300">
@@ -360,18 +364,18 @@ export default function DoctorsManagement() {
               </div>
 
               <h2 className="mb-2 text-xl font-extrabold text-white">
-                Supprimer ce médecin ?
+                Supprimer cet utilisateur ?
               </h2>
 
               <p className="mb-6 text-sm leading-6 text-[#B3CFE5]">
                 Voulez-vous vraiment supprimer{" "}
-                <span className="font-bold text-white">{deleteDoctor.name}</span>{" "}
+                <span className="font-bold text-white">{deleteUser.name}</span>{" "}
                 ?
               </p>
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => setDeleteDoctor(null)}
+                  onClick={() => setDeleteUser(null)}
                   className="flex-1 rounded-xl border border-[#B3CFE5]/20 bg-[#0A1931]/55 py-3 text-sm font-bold text-[#B3CFE5] transition hover:bg-[#1A3D63]"
                 >
                   Annuler

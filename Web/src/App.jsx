@@ -17,7 +17,6 @@ import RdvList from "./pages/Rendez-vous/RdvList.jsx";
 import DispoSlots from "./pages/Rendez-vous/DispoSlots.jsx";
 import Historique from "./pages/Rendez-vous/Historique.jsx";
 
-
 import PatientsPage from "./pages/patients/PatientsPage.jsx";
 import ConsultationsPage from "./pages/patients/ConsultationsPage.jsx";
 import DocumentsPage from "./pages/patients/DocumentsPage.jsx";
@@ -32,12 +31,13 @@ import DoctorProfile from "./pages/Doctors/DoctorProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
-
+  
+import AdminsManagement from "./pages/AdminsManagement";
+import SecretariesManagement from "./pages/SecretariesManagement";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* ================= PUBLIC ================= */}
 
         <Route path="/" element={<Login />} />
@@ -71,9 +71,7 @@ function App() {
         <Route
           path="/specialities"
           element={
-            <ProtectedRoute
-              allowedRoles={["admin", "secretary", "patient"]}
-            >
+            <ProtectedRoute allowedRoles={["admin", "secretary", "patient"]}>
               <SpecialitiesPage />
             </ProtectedRoute>
           }
@@ -88,10 +86,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/doctors/:specialite"
-          element={<DoctorsBySpecialite />}
-        />
+        <Route path="/doctors/:specialite" element={<DoctorsBySpecialite />} />
 
         {/* ================= DOCTORS ================= */}
 
@@ -132,6 +127,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admins" element={<AdminsManagement />} />
+        <Route path="/secretaries" element={<SecretariesManagement />} />
 
         {/* ================= DOCTOR ================= */}
 
@@ -214,34 +211,29 @@ function App() {
         <Route
           path="/dashboard/disponibilites"
           element={
-            <ProtectedRoute
-              allowedRoles={["admin", "secretary", "patient"]}
-            >
+            <ProtectedRoute allowedRoles={["admin", "secretary", "patient"]}>
               <DispoSlots />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/RdvDashboard"
           element={
-            <ProtectedRoute
-              allowedRoles={["admin", "secretary", "patient"]}
-            >
+            <ProtectedRoute allowedRoles={["admin", "secretary", "patient"]}>
               <RdvDashboard />
             </ProtectedRoute>
           }
         />
         <Route
-         path="/dashboard/historique"
-                element={
-                <ProtectedRoute
-                allowedRoles={["admin", "secretary", "doctor", "patient"]}
-                >
-                  <Historique />
-                  </ProtectedRoute>
-                }
-/>
-
+          path="/dashboard/historique"
+          element={
+            <ProtectedRoute
+              allowedRoles={["admin", "secretary", "doctor", "patient"]}
+            >
+              <Historique />
+            </ProtectedRoute>
+          }
+        />
 
         {/* ================= PATIENTS ================= */}
 
@@ -271,7 +263,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
       </Routes>
     </BrowserRouter>
   );
